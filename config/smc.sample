@@ -2,10 +2,10 @@
 
 $url  = 'http://yorkspace.library.yorku.ca/swordv2/servicedocument';
 $user = 'baabaa@baabaa.com';
-$pass = 'baabaa@baabaa.com'
+$pass = 'baabaa@baabaa.com';
 
 // The URL of the example deposit collection
-$depositurl = 'http://yorkspace.library.yorku.ca/swordv2/collection/10315/8004';
+$deposit_url = 'http://yorkspace.library.yorku.ca/swordv2/collection/10315/8004';
 
 // The SMC MARCXML to Qualified DC conversion stylesheet	
 $xsl_file = 'xsl/MARC21slim2SMCDC.xsl';
