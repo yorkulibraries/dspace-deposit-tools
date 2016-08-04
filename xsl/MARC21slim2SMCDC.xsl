@@ -37,7 +37,15 @@
 				</xsl:choose>
 			</xsl:for-each>
 	
+	
 			<!--<xsl:for-each select="marc:datafield[@tag=100]|marc:datafield[@tag=110]|marc:datafield[@tag=111]|marc:datafield[@tag=700]|marc:datafield[@tag=710]|marc:datafield[@tag=711]|marc:datafield[@tag=720]">-->
+				
+			<xsl:for-each select="marc:datafield[@tag=246]">
+				<dcterms:alternative>  <!---according to DC namespace at http://dublincore.org/documents/2012/06/14/dcmi-terms/?v=terms#terms-alternative -->
+					<xsl:value-of select="substring-before(marc:subfield[@code='a'], '.')"/>	
+				</dcterms:alternative>
+			</xsl:for-each>
+			
 			<xsl:for-each select="marc:datafield[@tag=700]|marc:datafield[@tag=710]|marc:datafield[@tag=711]|marc:datafield[@tag=720]">
 				<xsl:variable name="creator">
 					<xsl:call-template name="subfieldSelect">
@@ -188,7 +196,7 @@
 				</dcterms:identifier>
 			</xsl:for-each>
 			
-			<xsl:for-each select="marc:datafield[@tag=653]">
+			<!--<xsl:for-each select="marc:datafield[@tag=653]">
 				<xsl:variable name="subject" select="marc:subfield[@code='a']"/>				
 					<xsl:if test="not(contains($subject, ',')) and not(contains($subject, 'Topic'))">
 						<dcterms:subject>
@@ -200,11 +208,11 @@
 							<xsl:with-param name="input"><xsl:value-of select="marc:subfield[@code='a']"/></xsl:with-param>
 						</xsl:call-template>					
 					</xsl:if>				
-			</xsl:for-each>		
+			</xsl:for-each>		-->
 		</rdf:Description>
 	</xsl:template>
 	
-	<xsl:template name="get-subjects">
+<!--	<xsl:template name="get-subjects">
         <xsl:param name="input"/>			
 			<xsl:choose>
 				<xsl:when test="(contains($input, ','))">					
@@ -225,9 +233,10 @@
 					</dcterms:subject>
 				</xsl:otherwise>
 				</xsl:choose>		
-    </xsl:template>
+    </xsl:template> -->
 	
-</xsl:stylesheet><!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.
+</xsl:stylesheet>
+<!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.
 <metaInformation>
 <scenarios ><scenario default="no" name="MODS Website Samples" userelativepaths="yes" externalpreview="no" url="..\xml\MARC21slim\modswebsitesamples.xml" htmlbaseurl="" processortype="internal" commandline="" additionalpath="" additionalclasspath="" postprocessortype="none" postprocesscommandline="" postprocessadditionalpath="" postprocessgeneratedext=""/><scenario default="no" name="Ray Charles" userelativepaths="yes" externalpreview="no" url="..\xml\MARC21slim\raycharles.xml" htmlbaseurl="" processortype="internal" commandline="" additionalpath="" additionalclasspath="" postprocessortype="none" postprocesscommandline="" postprocessadditionalpath="" postprocessgeneratedext=""/><scenario default="yes" name="s6" userelativepaths="yes" externalpreview="no" url="..\ifla\sally6.xml" htmlbaseurl="" processortype="internal" commandline="" additionalpath="" additionalclasspath="" postprocessortype="none" postprocesscommandline="" postprocessadditionalpath="" postprocessgeneratedext=""/><scenario default="no" name="s7" userelativepaths="yes" externalpreview="no" url="..\ifla\sally7.xml" htmlbaseurl="" processortype="internal" commandline="" additionalpath="" additionalclasspath="" postprocessortype="none" postprocesscommandline="" postprocessadditionalpath="" postprocessgeneratedext=""/><scenario default="no" name="s12" userelativepaths="yes" externalpreview="no" url="..\ifla\sally12.xml" htmlbaseurl="" processortype="internal" commandline="" additionalpath="" additionalclasspath="" postprocessortype="none" postprocesscommandline="" postprocessadditionalpath="" postprocessgeneratedext=""/></scenarios><MapperInfo srcSchemaPath="" srcSchemaRoot="" srcSchemaPathIsRelative="yes" srcSchemaInterpretAsXML="no" destSchemaPath="" destSchemaRoot="" destSchemaPathIsRelative="yes" destSchemaInterpretAsXML="no"/>
 </metaInformation>
