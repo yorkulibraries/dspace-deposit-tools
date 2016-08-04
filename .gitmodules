@@ -1,3 +1,6 @@
 [submodule "lib/swordappv2-php-library"]
 	path = lib/swordappv2-php-library
 	url = git@github.com:swordapp/swordappv2-php-library.git
+[submodule "lib/marc4j"]
+	path = lib/marc4j
+	url = git@github.com:marc4j/marc4j.git
