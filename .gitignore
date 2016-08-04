@@ -1,1 +1,3 @@
 Ling
+config/*.php
+counter/*
