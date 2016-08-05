@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="marc">
+<xsl:stylesheet version="1.0" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="marc">
 	<xsl:import href="MARC21slimUtils.xsl"/>
 	<xsl:output method="xml" encoding="UTF-8" indent="yes"/>
-	<!--<xsl:param name="destfile"></xsl:param>-->
 
 	<xsl:template match="/">
-		<rdf:RDF>
 			<xsl:apply-templates/>
-		</rdf:RDF>
 	</xsl:template>
 	
-	<xsl:template match="marc:record">
-		<xsl:variable name="leader" select="marc:leader"/>
+  <xsl:template match="marc:record">
+    <xsl:variable name="leader" select="marc:leader"/>
 		<xsl:variable name="leader6" select="substring($leader,7,1)"/>
 		<xsl:variable name="leader7" select="substring($leader,8,1)"/>
 		<xsl:variable name="controlField008" select="marc:controlfield[@tag=008]"/>
-
-	  <rdf:Description>
+		
+		<entry xmlns="http://www.w3.org/2005/Atom" xmlns:dcterms="http://purl.org/dc/terms/">
 			<xsl:for-each select="marc:datafield[@tag=245]">				
 				<xsl:variable name="title">
 					<xsl:call-template name="subfieldSelect">
@@ -36,9 +33,6 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:for-each>
-	
-	
-			<!--<xsl:for-each select="marc:datafield[@tag=100]|marc:datafield[@tag=110]|marc:datafield[@tag=111]|marc:datafield[@tag=700]|marc:datafield[@tag=710]|marc:datafield[@tag=711]|marc:datafield[@tag=720]">-->
 				
 			<xsl:for-each select="marc:datafield[@tag=246]">
 				<dcterms:alternative>  <!---according to DC namespace at http://dublincore.org/documents/2012/06/14/dcmi-terms/?v=terms#terms-alternative -->
@@ -195,45 +189,8 @@
 					<xsl:value-of select="marc:subfield[@code='a']"/>
 				</dcterms:identifier>
 			</xsl:for-each>
-			
-			<!--<xsl:for-each select="marc:datafield[@tag=653]">
-				<xsl:variable name="subject" select="marc:subfield[@code='a']"/>				
-					<xsl:if test="not(contains($subject, ',')) and not(contains($subject, 'Topic'))">
-						<dcterms:subject>
-							<xsl:value-of select="substring-before(marc:subfield[@code='a'], '.')"/>	
-						</dcterms:subject>
-					</xsl:if>
-					<xsl:if test="(contains($subject, ','))">						
-						<xsl:call-template name="get-subjects">
-							<xsl:with-param name="input"><xsl:value-of select="marc:subfield[@code='a']"/></xsl:with-param>
-						</xsl:call-template>					
-					</xsl:if>				
-			</xsl:for-each>		-->
-		</rdf:Description>
-	</xsl:template>
-	
-<!--	<xsl:template name="get-subjects">
-        <xsl:param name="input"/>			
-			<xsl:choose>
-				<xsl:when test="(contains($input, ','))">					
-					<xsl:variable name="subject1" select="substring-before($input, ',')" />
-					<xsl:variable name="smallcase" select="'abcdefghijklmnopqrstuvwxyz'" />
-					<xsl:variable name="uppercase" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'" />
-					<dcterms:subject>
-						<xsl:value-of select="$subject1"/>
-					</dcterms:subject>					
-					<xsl:variable name="subject2" select="concat(translate(substring(substring-after($input, ', '), 1, 1), $smallcase, $uppercase), substring(substring-after($input, ', '), 2))" />
-					<xsl:call-template name="get-subjects">
-						<xsl:with-param name="input"><xsl:value-of select="$subject2"/></xsl:with-param>
-					</xsl:call-template>
-				</xsl:when>
-				<xsl:otherwise>
-					<dcterms:subject>
-						<xsl:value-of select="substring-before($input, '.')"/>
-					</dcterms:subject>
-				</xsl:otherwise>
-				</xsl:choose>		
-    </xsl:template> -->
+    </entry>
+  </xsl:template>
 	
 </xsl:stylesheet>
 <!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.
