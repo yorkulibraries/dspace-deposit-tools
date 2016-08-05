@@ -1,9 +1,11 @@
 <?php
-
-$url  = 'http://yorkspace.library.yorku.ca/swordv2/servicedocument';
+$servicedocument  = 'http://yorkspace-dev.library.yorku.ca/swordv2/servicedocument';
 $user = 'baabaa@baabaa.com';
-$pass = 'baabaa@baabaa.com';
+$password = 'baabaa@baabaa.com';
 
 // The URL of the example deposit collection
-$deposit_url = 'http://yorkspace.library.yorku.ca/swordv2/collection/10315/8004';
+$depositlocation = 'http://yorkspace-dev.library.yorku.ca/swordv2/collection/10315/8004';
+
+// Path to XSLT stylesheet
+$xsl_file = 'xsl/MARC21slim2SMCDC.xsl';
 ?>
