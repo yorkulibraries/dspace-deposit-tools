@@ -19,6 +19,9 @@ if (!file_exists($marcxml_file)) {
     die("File $marcxml_file does not exist.\n");
 }
 
+// set exception handler to save the identifiers to file
+set_exception_handler('custom_exception_handler');
+
 // load specified config file
 require_once($config_file);
 
@@ -62,14 +65,14 @@ while ($record = $records->next()) {
             $nl = $atom_doc->getElementsByTagNameNS('http://purl.org/dc/terms/', 'identifier');
             if ($nl->length) {
                 $identifier = $nl->item(0)->nodeValue;
+                print "==============================================================\n";
+                print "About to deposit record: $identifier\n";
                 if (!in_array($identifier, $identifiers)) {
-                    print "About to deposit record: $identifier\n";
                     if ($atom_doc->save($atom_entry_file)) {
                         $response = $sword->depositAtomEntry($depositlocation, $user, $password, '', $atom_entry_file, $sac_inprogress = true);
                         if (! (($response->sac_status >= 200) && ($response->sac_status < 300)) ) {
-                            print "Received HTTP status code: " . $response->sac_status . " (" . $response->sac_statusmessage . ")\n";
-                            save_identifiers($config, $identifiers);
-                            exit;
+                            print "ERROR: Received HTTP status code: " . $response->sac_status . " (" . $response->sac_statusmessage . ")\n";
+                            print $atom_doc->saveXML();
                         }
                         $identifiers[] = $identifier;
                     }
@@ -78,6 +81,7 @@ while ($record = $records->next()) {
                 }
             } else {
                 print "ERROR: No dcterms:identifier tag found in atom entry.\n";
+                print $atom_doc->saveXML();
             }
         }
     }
@@ -89,12 +93,27 @@ function die_usage() {
 }
 
 function load_identifiers($config) {
-    $identifiers = file("identifiers/{$config}", FILE_IGNORE_NEW_LINES);
+    $file = "identifiers/{$config}";
+    if (!file_exists($file)) {
+        return array();
+    }
+    $identifiers = file($file, FILE_IGNORE_NEW_LINES);
     return array_unique($identifiers);
 }
 
 function save_identifiers($config, $identifiers) {
-    file_put_contents("identifiers/{$config}", implode(PHP_EOL, $identifiers));
+    $file = "identifiers/{$config}";
+    $backup = $file . '-' . time();
+    
+    // make a backup copy of the file
+    copy($file, $backup);
+    
+    // write the content of the array to the file
+    file_put_contents($file, implode(PHP_EOL, $identifiers));
 }
 
+function custom_exception_handler($exception) {
+    global $config, $identifiers;
+    save_identifiers($config, $identifiers);
+}
 ?>
