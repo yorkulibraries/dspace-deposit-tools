@@ -1,5 +1,8 @@
 # dspace-deposit-tools
 
+## Install File_MARC 
+    $ sudo pear install --onlyreqdeps File_Marc-alpha
+
 ## build marc4j 
     $ cd lib/marc4j/
     $ ant
