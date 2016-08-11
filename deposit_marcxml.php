@@ -1,4 +1,6 @@
 <?php
+ini_set('memory_limit','1024M');
+
 if (count($argv) < 3) {
     die_usage();
 }
@@ -35,11 +37,13 @@ require_once('lib/swordappv2-php-library/swordappclient.php');
 $sword = new SWORDAPPClient();
 
 // get the service document
+print "Fetching service document\n";
 $sd = $sword->servicedocument($servicedocument, $user, $password, '');
 if ($sd->sac_status != 200) {
-    print "Received HTTP status code: " . $sd->sac_status . " (" . $sd->sac_statusmessage . ")\n";
+    print "ERROR: Received HTTP status code: " . $sd->sac_status . " (" . $sd->sac_statusmessage . ")\n";
     die;
 }
+print "Got service document\n";
 
 // Load XSLT Stylesheet
 $stylesheet = new DOMDocument;
@@ -56,7 +60,6 @@ require_once('File/MARCXML.php');
 $records = new File_MARCXML($marcxml_file);
 
 // transform each marcxml record and deposit to dspace
-$atom_entry_file = tempnam(sys_get_temp_dir(), $argv[0]);
 while ($record = $records->next()) {
     $doc = new DOMDocument;
     if ($doc->loadXML($record->toXML())) {
@@ -66,15 +69,21 @@ while ($record = $records->next()) {
             if ($nl->length) {
                 $identifier = $nl->item(0)->nodeValue;
                 print "==============================================================\n";
-                print "About to deposit record: $identifier\n";
+                print "Processing record: $identifier\n";
                 if (!in_array($identifier, $identifiers)) {
-                    if ($atom_doc->save($atom_entry_file)) {
+                    $atom_entry_file = tempnam(sys_get_temp_dir(), $config);
+                    print "Saving XML atom entry to file: $atom_entry_file\n";
+                    if ($size = $atom_doc->save($atom_entry_file)) {
+                        print "saved $size bytes to $atom_entry_file\n";
+                        print "Depositing atom entry $identifier\n";
                         $response = $sword->depositAtomEntry($depositlocation, $user, $password, '', $atom_entry_file, $sac_inprogress = true);
                         if (! (($response->sac_status >= 200) && ($response->sac_status < 300)) ) {
                             print "ERROR: Received HTTP status code: " . $response->sac_status . " (" . $response->sac_statusmessage . ")\n";
-                            print $atom_doc->saveXML();
+                        } else {
+                            print "Done depositing $identifier\n";
+                            $identifiers[] = $identifier;
                         }
-                        $identifiers[] = $identifier;
+                        unlink($atom_entry_file);
                     }
                 } else {
                     print "$identifier may have been deposited already, skipping it.\n";
@@ -115,5 +124,6 @@ function save_identifiers($config, $identifiers) {
 function custom_exception_handler($exception) {
     global $config, $identifiers;
     save_identifiers($config, $identifiers);
+    print $exception;
 }
 ?>
