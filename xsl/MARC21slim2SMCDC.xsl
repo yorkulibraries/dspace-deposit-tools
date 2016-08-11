@@ -117,6 +117,10 @@
 				<xsl:text>For further copyright information contact : ascproj@yorku.ca</xsl:text>
 			</dcterms:rights>
 			
+			<dcterms:rights>
+				<xsl:text>http://bit.ly/SheetMusicFAQ</xsl:text>
+			</dcterms:rights>
+			
 			<dcterms:isPartOfSeries>				
 				<xsl:variable name="identifier">
 					<xsl:value-of select="marc:datafield[@tag=090]/marc:subfield[@code='a']"/>
