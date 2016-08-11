@@ -1,5 +1,8 @@
 # dspace-deposit-tools
 
+## install required PHP libraries
+    $ sudo apt-get install php5-curl php5-xsl
+
 ## Install File_MARC 
     $ sudo pear install --onlyreqdeps File_Marc-alpha
 
