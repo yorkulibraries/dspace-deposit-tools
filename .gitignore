@@ -1,3 +1,4 @@
 Ling
 config/*.php
 identifiers/*
+checksums/*
