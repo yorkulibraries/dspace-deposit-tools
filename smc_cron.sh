@@ -1,4 +1,5 @@
 #!/bin/sh
+EMAIL_RCPT=$2
 
 LOGFILE=/tmp/$$.log
 exec > $LOGFILE 2>&1
@@ -11,8 +12,12 @@ CHECKSUMS_DIR=checksums
 MD5_FILE=${CHECKSUMS_DIR}/smc.md5
 TMP_MARCXML_FILE=/tmp/$$.xml
 
-if [ -z "$1" ]; then
-  echo "Usage: $0 path_to_marc_file"
+if [ -z "$MARC_FILE" ]; then
+  echo "Usage: $0 path_to_marc_file email_address"
+  exit
+fi
+if [ -z "$EMAIL_RCPT" ]; then
+  echo "Usage: $0 path_to_marc_file email_address"
   exit
 fi
 
@@ -35,7 +40,7 @@ if [ $changed -eq 1 ]; then
   echo "converting $MARC_FILE to MARCXML"
   java -cp $MARC4J_JAR org.marc4j.util.MarcXmlDriver -convert MARC8 -normalize -out $TMP_MARCXML_FILE $MARC_FILE
   php deposit_marcxml.php smc $TMP_MARCXML_FILE
-  mutt -s "YorkSpace Deposit Result" -a $TMP_MARCXML_FILE -- tuan@yorku.ca  < $LOGFILE
+  mutt -s "YorkSpace Deposit Result" -a $TMP_MARCXML_FILE -- $EMAIL_RCPT < $LOGFILE
   rm $TMP_MARCXML_FILE
   rm $LOGFILE
 fi
