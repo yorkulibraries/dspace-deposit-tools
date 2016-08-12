@@ -1,9 +1,6 @@
 #!/bin/sh
 EMAIL_RCPT=$2
 
-LOGFILE=/tmp/$$.log
-exec > $LOGFILE 2>&1
-
 MARC4J_JAR=lib/marc4j/build/marc4j-2.7.0.jar
 
 MARC_FILE=$1
@@ -20,6 +17,9 @@ if [ -z "$EMAIL_RCPT" ]; then
   echo "Usage: $0 path_to_marc_file email_address"
   exit
 fi
+
+LOGFILE=/tmp/$$.log
+exec > $LOGFILE 2>&1
 
 [ ! -d $IDENTIFIERS_DIR ] && mkdir $IDENTIFIERS_DIR
 [ ! -d $CHECKSUMS_DIR ] && mkdir $CHECKSUMS_DIR
