@@ -5,6 +5,12 @@
 
 ## Install File_MARC 
     $ sudo pear install --onlyreqdeps File_Marc-alpha
+    
+## Install this 
+    $ git clone git@github.com:yorkulibraries/dspace-deposit-tools.git
+    $ cd dspace-deposit-tools
+    $ git submodule init
+    $ git submodule update
 
 ## build marc4j 
     $ cd lib/marc4j/
