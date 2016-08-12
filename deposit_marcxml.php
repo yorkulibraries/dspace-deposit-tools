@@ -37,7 +37,7 @@ require_once('lib/swordappv2-php-library/swordappclient.php');
 $sword = new SWORDAPPClient();
 
 // get the service document
-print "Fetching service document\n";
+print "Fetching service document $servicedocument\n";
 $sd = $sword->servicedocument($servicedocument, $user, $password, '');
 if ($sd->sac_status != 200) {
     print "ERROR: Received HTTP status code: " . $sd->sac_status . " (" . $sd->sac_statusmessage . ")\n";
@@ -75,7 +75,7 @@ while ($record = $records->next()) {
                     print "Saving XML atom entry to file: $atom_entry_file\n";
                     if ($size = $atom_doc->save($atom_entry_file)) {
                         print "saved $size bytes to $atom_entry_file\n";
-                        print "Depositing atom entry $identifier\n";
+                        print "Depositing atom entry $identifier to $depositlocation\n";
                         $response = $sword->depositAtomEntry($depositlocation, $user, $password, '', $atom_entry_file, $sac_inprogress = true);
                         if (! (($response->sac_status >= 200) && ($response->sac_status < 300)) ) {
                             print "ERROR: Received HTTP status code: " . $response->sac_status . " (" . $response->sac_statusmessage . ")\n";
