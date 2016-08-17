@@ -114,11 +114,7 @@
 			</dcterms:type>
 			
 			<dcterms:rights>				
-				<xsl:text>For further copyright information contact : ascproj@yorku.ca</xsl:text>
-			</dcterms:rights>
-			
-			<dcterms:rights qualifier="uri">
-				<xsl:text>http://www.library.yorku.ca/web/collections/digitalscholarship/sheet-music-faq/</xsl:text>
+				<xsl:text>FAQ for the John Arpin Sheet Music Collection: http://www.library.yorku.ca/web/collections/digitalscholarship/sheet-music-faq/</xsl:text>
 			</dcterms:rights>
 			
 			<dcterms:isPartOfSeries>				
