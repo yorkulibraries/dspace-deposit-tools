@@ -37,6 +37,9 @@ if [ -f $MD5_FILE ]; then
 fi 
 
 if [ $changed -eq 1 ]; then
+  # update the checksums
+  md5sum $MARC_FILE > $MD5_FILE
+  
   echo "converting $MARC_FILE to MARCXML"
   java -cp $MARC4J_JAR org.marc4j.util.MarcXmlDriver -convert MARC8 -normalize -out $TMP_MARCXML_FILE $MARC_FILE
   php deposit_marcxml.php smc $TMP_MARCXML_FILE
@@ -45,5 +48,3 @@ if [ $changed -eq 1 ]; then
   rm $LOGFILE
 fi
 
-# update the checksums
-md5sum $MARC_FILE > $MD5_FILE
