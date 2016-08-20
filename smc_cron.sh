@@ -45,6 +45,7 @@ if [ $changed -eq 1 ]; then
   php deposit_marcxml.php smc $TMP_MARCXML_FILE
   mutt -s "YorkSpace Deposit Result" -a $TMP_MARCXML_FILE -- $EMAIL_RCPT < $LOGFILE
   rm $TMP_MARCXML_FILE
-  rm $LOGFILE
 fi
+
+rm $LOGFILE
 
